@@ -15,6 +15,7 @@ class _CalculatorState extends State<Calculator> {
   String userInput = '';
   String calculatedAnswer = '';
   String storedAns = '';
+  String answer = '';
 
   final List<String> values = [
     'C',
@@ -86,11 +87,19 @@ class _CalculatorState extends State<Calculator> {
       });
     }else if(val == '='){
       if(userInput.isEmpty){
-        return;
-      }else{
-        calculatedAnswer = ConditionEquation().evaluateExpression(userInput).toString();
+        answer = 'Input is empty';
+      }else if (!userInput.contains(RegExp(r'[0-9]'))){
+        answer = 'Invalid Syntax';
+      }
+      else{
+        try {
+          answer = ConditionEquation().evaluateExpression(userInput).toString();
+        } catch (e) {
+          answer = 'Invalid Syntax';
+        }
       }
       setState(() {
+        calculatedAnswer = answer;
         storedAns = calculatedAnswer;
       });
     }else if(val == 'C'){
